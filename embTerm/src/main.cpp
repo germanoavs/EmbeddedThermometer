@@ -15,14 +15,12 @@
 #include <stdio.h>
 
 
-// define two Tasks for DigitalRead & AnalogRead
 void sensorTask( void *pvParameters );
 void terminalTask( void *pvParameters );
 void eepromTask( void *pvParameters );
 void buttonInterrupt();
 float CalcMedia();
 void clearEEPROM();
-char *ftoa(char *a, double f, int precision);
 
 #define DS18B20 7                             ///< Define the digital pin used by the sensor
 #define MEMORY_SIZE 1024/sizeof(float)        ///< Memory lenght
@@ -155,7 +153,7 @@ void eepromTask( void *pvParameters __attribute__((unused)) )  // This is a Task
       if (xQueueReceive(queue_2, &temperature, portMAX_DELAY) == pdPASS) {
         memory_index += sizeof(float);
 
-        if(memory_index > MEMORY_SIZE){
+        if(memory_index > (MEMORY_SIZE - sizeof(float))){
            memory_index = -4;
            FULL_MEMORY = true;
         }
